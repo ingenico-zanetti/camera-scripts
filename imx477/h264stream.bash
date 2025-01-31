@@ -33,8 +33,7 @@ do
 		${width} \
 		${height} \
 		--codec h264 \
-		--quality 95 \
 		--rotation 180 \
-		--listen -o tcp://0.0.0.0:56789/ 2>&1 | tee $(date +%Y%m%d-%H%M%S.txt)
+		--libav-format h264 -o - | ./h264streamer
 done
 
