@@ -34,6 +34,6 @@ do
 		${height} \
 		--codec h264 \
 		--rotation 180 \
-		--libav-format h264 -o - | ./h264streamer
+		--libav-format h264 -o - 2>/dev/null | ./h264streamer
 done
 
