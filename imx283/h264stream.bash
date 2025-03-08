@@ -37,11 +37,12 @@ else
 	logfile="2K.log"
 	fps=" --framerate 30 "
 fi
-shutter=" --shutter 16000 "
-bitrate=" --bitrate 18000000 "
-
-#/ while true ; do
-	/usr/local/bin/libcamera-vid ${shutter} --verbose --info-text "frame %frame (%fps fps) exp %exp ag %ag dg %dg rg %rg bg %bg" ${mode} ${roi} ${bitrate} ${gain} ${fps}  -t 0 ${resolution} --codec h264 -o - --libav-format h264 2>>${logfile} | ./h264streamer 
+# shutter=" --shutter 4000 "
+# wb="  --awbgains 1.56,2.15 "
+bitrate=" --bitrate 48000000 "
+# preview=" --nopreview "
+while true ; do
+	/usr/local/bin/libcamera-vid ${preview} ${shutter} ${wb} --verbose --info-text "frame %frame (%fps fps) exp %exp ag %ag dg %dg rg %rg bg %bg" ${mode} ${roi} ${bitrate} ${gain} ${fps}  -t 0 ${resolution} --codec h264 -o - --libav-format h264 2>>${logfile} | ./h264streamer 
 	sleep 1
-#/ done
+done
 
