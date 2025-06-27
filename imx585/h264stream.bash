@@ -1,4 +1,14 @@
 #!/bin/bash
+
+if [ "$B" = "" ]
+then
+	bitrate=" --bitrate 48000000 "
+	echo "Using default ${bitrate}"
+else
+	bitrate=" --bitrate ${B} "
+	echo "Using user provided ${bitrate}"
+fi
+
 if [ "$UHD" == "0" ]
 then
 	mode=" --mode 3856:2180:12 "
@@ -7,7 +17,6 @@ then
 	gain=" --gain 1 "
 	logfile="UHD=0.log"
 	fps=" --framerate 30 "
-	bitrate=" --bitrate 48000000 "
 elif [ "$UHD" == "1" ]
 then
 	mode=" --mode 3856:2180:12 "
@@ -16,7 +25,6 @@ then
 	gain=" --gain 1 "
 	logfile="UHD=1.log"
 	fps=" --framerate 15 "
-	bitrate=" --bitrate 48000000 "
 else
 	mode=" --mode 1928:1090:12 "
 	roi=" --roi 0,0,1,1 "
@@ -24,7 +32,6 @@ else
 	gain=" --gain 4 "
 	logfile="2K.log"
 	fps=" --framerate 60 "
-	bitrate=" --bitrate 48000000 "
 fi
 # shutter=" --shutter 4000 "
 # wb="  --awbgains 1.56,2.15 "
