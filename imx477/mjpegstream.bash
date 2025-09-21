@@ -7,7 +7,7 @@
 # roi=" --roi 0.0450,0.2125,0.9468,0.7106 "
 . ~/bin/roi.bash
 
-if [ "${UHD}" != "" ]
+if [ "${UHD}" == "1" ]
 then
 	echo "4K UHD"
 	mode=" --mode 4056:3040:12 "
@@ -18,7 +18,7 @@ then
 	gain=" --gain 1 "
 	# shutter=" --shutter 96000 "
 	# gain=" --gain 1 "
-else
+elif ([ ${UHD} == "0" ]
 	echo "FHD 1080p"
 	mode=" --mode 2028:1520:12 "
 	width=" --width 1920 "
@@ -28,6 +28,9 @@ else
 	# gain=" --gain 3 "
 	shutter=" --exposure sport --metering spot"
 	gain=" --gain 4 "
+else
+	libcamera-vid --nopreview --rotation 180 --gain 4 --shutter 4000 --mode 1332:990:10 --width 1280 --height 720 --codec mjpeg --framerate 240 --roi 0.0188,0.1364,0.9624,0.7273  --awbgains 1.5,1.6 --quality 95  -o - -t 60000 | mjpegsplitter
+	exit
 fi
 
 while sleep 1
