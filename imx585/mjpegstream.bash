@@ -37,7 +37,7 @@ else
 			--mode 3856:2180:12 \
 			--gain 1 --framerate 30 -t 0 --width 1920 --height 1080 \
 			--codec mjpeg ${quality} --metering average --exposure sport \
-		       	-o - --libav-format mjpeg 2>>2K.err | ./mjpegstreamer
+		       	-o - --libav-format mjpeg 2>>2K.err | ./mjpegstreamer 56789
 	done
 fi
 
