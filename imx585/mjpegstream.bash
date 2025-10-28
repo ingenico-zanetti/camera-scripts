@@ -62,6 +62,7 @@ while sleep 1
 do
 	libcamera-vid --verbose --info-text "frame %frame (%fps fps) exp %exp ag %ag dg %dg rg %rg bg %bg" \
 		${mode} \
+		${shutter} \
 		${gain}  ${fps}  ${duration} ${resolution} \
 		--codec mjpeg ${quality} --metering average --exposure sport \
 		-o - --libav-format mjpeg  2>>${log} | ./mjpegstreamer 56789
