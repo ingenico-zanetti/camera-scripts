@@ -7,12 +7,12 @@ TEMP=$(mktemp -d)
 echo "Build folder: ${TEMP}"
 cd ${TEMP}
 
-sudo apt remove --purge rpicam-apps
-sudo apt remove --purge libcamera-dev libepoxy-dev
+sudo apt remove --purge -y rpicam-apps
+sudo apt remove --purge -y libcamera-dev libepoxy-dev libopencv-dev
 
 sudo apt install -y linux-headers dkms git
 
-sudo apt install -y libjpeg-dev libtiff5-dev libpng-dev libopencv-dev
+sudo apt install -y libjpeg-dev libtiff5-dev libpng-dev
 sudo apt install -y libavcodec-dev libavdevice-dev libavformat-dev libswresample-dev
 
 sudo apt install -y python3-pip python3-jinja2
