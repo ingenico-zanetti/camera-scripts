@@ -1,4 +1,8 @@
 #!/bin/bash
+# Top level camera script.
+# Responsible for:
+# - sourcing the global parameters
+# - launching the proper camera script
 
 if [ -f parameters.new ]
 then
