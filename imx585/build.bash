@@ -7,10 +7,10 @@ TEMP=$(mktemp -d)
 echo "Build folder: ${TEMP}"
 cd ${TEMP}
 
-sudo apt remove --purge -y rpicam-apps
+sudo apt remove --purge -y rpicam-apps-lite rpicam-apps
 sudo apt remove --purge -y libcamera-dev libepoxy-dev libopencv-dev
 
-sudo apt install -y linux-headers dkms git
+sudo apt install -y linux-headers-$(uname -r) dkms
 
 sudo apt install -y libjpeg-dev libtiff5-dev libpng-dev
 sudo apt install -y libavcodec-dev libavdevice-dev libavformat-dev libswresample-dev
@@ -26,7 +26,7 @@ sudo apt install -y
 
 # IMX585 kernel module
 #
-git clone https://github.com/will127534/imx585-v4l2-driver.git
+git clone -b 6.12.y https://github.com/will127534/imx585-v4l2-driver.git
 cd imx585-v4l2-driver/
 sudo ./setup.sh
 cd ..
@@ -61,6 +61,7 @@ meson compile -C build -j 1
 sudo meson install -C build
 cd ..
 
+sudo ldconfig
 rpicam-hello --version
 rpicam-hello --list-cameras
 
