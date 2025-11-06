@@ -29,7 +29,12 @@ if [ "" = "$G" ]
 then
 	gain=" --gain 1 "
 else
-	gain=" --gain ${G} "
+	if [ "0" == "$G" ]
+	then
+		gain=""
+	else
+		gain=" --gain ${G} "
+	fi
 fi
 
 if [ "" = "$F" ]
