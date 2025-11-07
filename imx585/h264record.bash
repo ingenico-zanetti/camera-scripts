@@ -16,8 +16,8 @@ mount /media/CFB
 
 while sleep 1
 do
-	filename=/media/CFB/$(date +%Y%m%d-%H%M%S.h264)
-	nc -w 2 localhost 56789 | dd of=${filename} status=progress
+	filename=/media/CFB/$(date +%Y%m%d-%H%M%S.mp4)
+	nc -w 2 localhost 56789 | ffmpeg -y -f h264 -r 30 -i - -an -codec copy ${filename}
 	size=$(du -hs ${filename}| cut -f 1)
 	if [ "${size}" == "0" ]
 	then
