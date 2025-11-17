@@ -1,35 +1,53 @@
 #!/bin/bash
-. ./roi.bash
-if [ "" = "$UHD" ]
+if [ "$UHD" == "0" ]
 then
-	while sleep 1 
-	do
-		echo 1080p
-		libcamera-vid --verbose --info-text "frame %frame (%fps fps) exp %exp ag %ag dg %dg rg %rg bg %bg" \
-			--exposure sport --metering average --mode 5568:3664:12 ${roi} \
-			--gain 4 --framerate 30 -t 0 --width 1920 --height 1080 --codec mjpeg --quality 95 \
-		       	-o - --libav-format mjpeg | ./mjpegstreamer
-	done
-elif [ 1 -eq "$UHD" ]
+	mode=" --mode 5568:3094:10 "
+	# perfectly centered roi would be roi=" --roi 0.1491,0.1491,0.7018,0.7018 "
+	# but the sensor is *not* exactly centered on the optical axis
+	#
+	# x=0.1382 => crop (main) (756, yyy) on est au plus proche de la perfection
+	#
+	# y=0.2560 => crop (main) (xxx,1072) on est au plus proche de la perfection
+	#
+	roi=" --roi 0.1382,0.2560,0.7018,0.7018 "
+	resolution=" --width 1920 --height 1080 "
+	gain=" --gain 4 "
+	logfile="UHD=0.log"
+	quality=" --quality 85 "
+	fps=" --framerate 30 "
+	shutter=" --shutter 16550 "
+elif [ "$UHD" == "1" ]
 then
-	while sleep 1 
-	do
-		echo 2160p
-		libcamera-vid --verbose --info-text "frame %frame (%fps fps) exp %exp ag %ag dg %dg rg %rg bg %bg" \
-			--mode 5568:3664:12 ${roi} \
-			--gain 1 --framerate 30 -t 0 --width 3840 --height 2160 \
-			--codec mjpeg --quality 85 --metering average --exposure sport \
-			-o - --libav-format mjpeg 2>>4K.err | ./mjpegstreamer  | tee $(date +%Y%m%d-%H%M%S.txt) 
-	done
+	mode=" --mode 5568:3094:10 "
+	roi=" --roi 0.1382,0.2560,0.7018,0.7018 "
+	resolution=" --width 3840 --height 2160 "
+	gain=" --gain 4 "
+	logfile="UHD=1.log"
+	quality=" --quality 75 "
+	fps=" --framerate 30 "
 else
-	while sleep 1 
-	do
-		echo 3648p
-		libcamera-vid --verbose --info-text "frame %frame (%fps fps) exp %exp ag %ag dg %dg rg %rg bg %bg" \
-			--mode 5568:3664:12 \
-			--gain 1 --framerate 3 -t 0 --width 5472 --height 3648 \
-			--codec mjpeg --quality 100 --metering spot \
-		       	-o - --libav-format mjpeg | ./mjpegstreamer
-	done
+	mode=" --mode 2784:1828:12 "
+	# perfectly centered roi would be roi=" --roi 0.1491,0.1491,0.7018,0.7018 "
+	# but the sensor is *not* exactly centered on the optical axis
+	#
+	# y=0.2166 => crop (main) (xxx, 790) on est au plus proche de la perfection
+	#
+	# x=0.1382 => crop (main) (756, yyy) on est au plus proche de la perfection
+	#
+	roi=" --roi 0.1382,0.2166,0.7018,0.5923 "
+	resolution=" --width 1920 --height 1080 "
+	gain=" --gain 4 "
+	logfile="2K.log"
+	fps=" --framerate 30 "
+	quality=" --quality 50 "
 fi
+# shutter=" --shutter 4000 "
+# wb="  --awbgains 1.56,2.15 "
+# bitrate=" --bitrate 48000000 "
+# preview=" --nopreview "
+options=" -k "
+while true ; do
+	/usr/local/bin/libcamera-vid ${options} ${preview} ${shutter} ${wb} --verbose --info-text "frame %frame (%fps fps) exp %exp ag %ag dg %dg rg %rg bg %bg focus %focus" ${mode} ${roi} ${quality} ${gain} ${fps}  -t 0 ${resolution} --codec mjpeg -o - --libav-format mjpeg 2>>${logfile} | ./mjpegstreamer 56789
+	sleep 1
+done
 

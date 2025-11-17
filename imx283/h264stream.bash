@@ -9,11 +9,13 @@ then
 	#
 	# y=0.2560 => crop (main) (xxx,1072) on est au plus proche de la perfection
 	#
-	roi=" --roi 0.1382,0.2560,0.7018,0.7018 "
+	roi=" --roi 0.1382,0.2560,0.7019,0.7019 "
 	resolution=" --width 1920 --height 1080 "
-	gain=" --gain 4 "
+	# gain=" --gain 4 "
+	gain=" "
 	logfile="UHD=0.log"
 	fps=" --framerate 30 "
+	shutter=" --shutter 16550 "
 elif [ "$UHD" == "1" ]
 then
 	mode=" --mode 5568:3094:10 "
@@ -41,8 +43,9 @@ fi
 # wb="  --awbgains 1.56,2.15 "
 bitrate=" --bitrate 48000000 "
 # preview=" --nopreview "
+options=" --denoise off "
 while true ; do
-	/usr/local/bin/libcamera-vid ${preview} ${shutter} ${wb} --verbose --info-text "frame %frame (%fps fps) exp %exp ag %ag dg %dg rg %rg bg %bg" ${mode} ${roi} ${bitrate} ${gain} ${fps}  -t 0 ${resolution} --codec h264 -o - --libav-format h264 2>>${logfile} | ./h264streamer 
+	/usr/local/bin/libcamera-vid ${options} ${preview} ${shutter} ${wb} --verbose --info-text "frame %frame (%fps fps) exp %exp ag %ag dg %dg rg %rg bg %bg focus %focus" ${mode} ${roi} ${bitrate} ${gain} ${fps}  -t 0 ${resolution} --codec h264 -o - --libav-format h264 2>>${logfile} | ./h264streamer 
 	sleep 1
 done
 

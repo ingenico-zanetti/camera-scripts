@@ -41,7 +41,7 @@ int main(int argc, const char *argv[]){
 							if(delta.tv_sec > 1){
 								// Initiate shutdown
 								result = system("touch /tmp/shutdown"); // prevent record from restarting
-								result = system("kill $(ps aux |grep nc|grep \"localhost 56789\" |awk '{print $2}')");
+								result = system("kill $(ps aux |grep \"\\./h264stream\"|grep -v grep | awk '{print $2'})");
 								fprintf(stderr, "%s@%d:result=%i" "\n", __func__, __LINE__, result);
 								for(int i = 0 ; i < 100 ; i++){
 									result = system("ps aux |grep ffmpeg|grep h264|grep -v sh");
