@@ -1,22 +1,23 @@
 #!/bin/bash
-
+PATH="/usr/local/bin:$PATH"
 if [ "" = "$UHD" ]
 then
 	mode=" --mode 1928:1090:12 "
 	resolution=" --width 1920 --height 1080 "
 	DEFAULT_FRAME_RATE=60
-	log="UHD=no.log"
+	log="$(date +%Y%m%d-%H%M%S.UHD=no.log)"
+
 elif [ 1 -eq "$UHD" ]
 then
 	mode=" --mode 3856:2180:12 "
 	resolution=" --width 3840 --height 2160 "
 	DEFAULT_FRAME_RATE=15
-	log="UHD=1.log"
+	log="$(date +%Y%m%d-%H%M%S.UHD=1.log)"
 else
 	mode=" --mode 3856:2180:12 "
 	resolution=" --width 1920 --height 1080 "
 	DEFAULT_FRAME_RATE=30
-	log="UHD=0.log"
+	log="$(date +%Y%m%d-%H%M%S.UHD=0.log)"
 fi
 if [ "$D" = "" ]
 then
@@ -58,7 +59,9 @@ else
 	bitrate=" --bitrate ${B} "
 fi
 
-echo "Using ${duration} ; ${gain} ; ${fps} ; ${shutter} ; ${mode} ; ${resolution} ; ${bitrate} and logging to ${log}"
+wb="  --awbgains 1.64,2.05 "
+
+echo "Using ${duration} ; ${gain} ; ${fps} ; ${shutter} ; ${wb} ; ${mode} ; ${resolution} ; ${bitrate} and logging to ${log}"
 
 while sleep 1
 do
@@ -72,6 +75,7 @@ do
 	       	${duration} \
 		${resolution} \
 		--metering average --exposure sport \
+		${wb} \
 		${bitrate} --codec h264 -o - --libav-format h264 2>>${log} | ./h264streamer 
 	if [ "$D" != "" ]
 	then
