@@ -17,7 +17,7 @@ mount /media/CFB
 while sleep 1
 do
 	filename=/media/CFB/$(date +%Y%m%d-%H%M%S.mp4)
-	nc -w 2 localhost 56789 | ffmpeg -y -f h264 -r 30 -i - -an -codec copy ${filename}
+	ffmpeg -y -f h264 -r 30 -i tcp://localhost:56789 -an -codec copy ${filename} 2>&1 | tee -a h264record.log
 	size=$(du -hs ${filename}| cut -f 1)
 	if [ "${size}" == "0" ]
 	then
