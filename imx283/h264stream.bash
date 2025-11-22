@@ -44,7 +44,7 @@ wb="  --awbgains 1.64,2.05 "
 bitrate=" --bitrate 48000000 "
 # preview=" --nopreview "
 options=" --denoise off "
-while true ; do
+while [ ! -f /tmp/shutdown ] ; do
 	/usr/local/bin/libcamera-vid ${options} ${preview} ${shutter} ${wb} --verbose --info-text "frame %frame (%fps fps) exp %exp ag %ag dg %dg rg %rg bg %bg focus %focus" ${mode} ${roi} ${bitrate} ${gain} ${fps}  -t 0 ${resolution} --codec h264 -o - --libav-format h264 2>>${logfile} | ./h264streamer 
 	sleep 1
 done
