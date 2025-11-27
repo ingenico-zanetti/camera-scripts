@@ -10,7 +10,7 @@ do
 	then
 		echo ${device} not mounted yet
 	else
-		ffmpeg -f alsa -i hw:CARD=H2n,DEV=0 ${filename}
+		arecord -f dat -t raw -D hw:CARD=H2n,DEV=0 - | ./datstreamer stdout 56787:24000 > ${filename}
 		size=$(du -hs ${filename}| cut -f 1)
 		if [ "${size}" == "0" ]
 		then
