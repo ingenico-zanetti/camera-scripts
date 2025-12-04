@@ -68,7 +68,7 @@ cd libcamera
 # consistent with a 300MHz overclock (600MPix/s) from 200MHz (400MPix/s)
 git apply "${SOURCE}/libcamera.patch"
 meson setup build --buildtype=release -Dpipelines=rpi/vc4,rpi/pisp -Dipas=rpi/vc4,rpi/pisp -Dv4l2=enabled -Dgstreamer=disabled -Dtest=false -Dlc-compliance=disabled -Dcam=disabled -Dqcam=disabled -Ddocumentation=disabled -Dpycamera=disabled
-ninja -C build -j 1
+ninja -C build -j 2
 sudo ninja -C build install
 cd ..
 
@@ -77,7 +77,7 @@ cd ..
 git clone https://github.com/raspberrypi/rpicam-apps.git
 cd rpicam-apps/
 meson setup build -Denable_libav=enabled -Denable_drm=enabled -Denable_egl=disabled -Denable_qt=disabled -Denable_opencv=disabled -Denable_tflite=disabled -Denable_hailo=disabled
-meson compile -C build -j 1
+meson compile -C build -j 2
 sudo meson install -C build
 cd ..
 
@@ -102,4 +102,13 @@ git clone https://github.com/ingenico-zanetti/mjpegstreamer.git
 cd mjpegstreamer
 make install
 cd ..
+
+cat /boot/firmware/config.txt | sed -e "s/camera_auto_detect=1/camera_auto_detect=0\ndtoverlay=imx283,cam1/g" > config.txt
+grep -q "usb_max_current_enable=1" config.txt
+if [ "1" == "$?" ]
+then
+	echo "usb_max_current_enable=1" >> config.txt
+fi
+
+sudo cp -vf config.txt /boot/firmware/
 
