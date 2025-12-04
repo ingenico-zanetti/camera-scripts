@@ -1,5 +1,7 @@
 #!/bin/bash
 
+mkdir -p ${HOME}/bin
+
 SOURCE=$(pwd)
 echo "Script run from ${SOURCE}"
 
