@@ -7,22 +7,21 @@ TEMP=$(mktemp -d)
 echo "Build folder: ${TEMP}"
 cd ${TEMP}
 
-sudo apt remove --purge -y rpicam-apps-lite rpicam-apps
-sudo apt remove --purge -y libcamera-dev libepoxy-dev libopencv-dev
+sudo apt-get remove --purge -y rpicam-apps-lite rpicam-apps
+sudo apt-get remove --purge -y libcamera-dev libepoxy-dev libopencv-dev
 
-sudo apt install -y linux-headers-$(uname -r) dkms
+sudo apt-get install -y linux-headers-$(uname -r) dkms
 
-sudo apt install -y libjpeg-dev libtiff5-dev libpng-dev
-sudo apt install -y libavcodec-dev libavdevice-dev libavformat-dev libswresample-dev
+sudo apt-get install -y libjpeg-dev libtiff5-dev libpng-dev
+sudo apt-get install -y libavcodec-dev libavdevice-dev libavformat-dev libswresample-dev
 
-sudo apt install -y python3-pip python3-jinja2
-sudo apt install -y libboost-dev
-sudo apt install -y libgnutls28-dev openssl libtiff5-dev pybind11-dev
-sudo apt install -y meson cmake ninja-build
-sudo apt install -y python3-yaml python3-ply
+sudo apt-get install -y python3-pip python3-jinja2
+sudo apt-get install -y libboost-dev
+sudo apt-get install -y libgnutls28-dev openssl libtiff5-dev pybind11-dev
+sudo apt-get install -y meson cmake ninja-build
+sudo apt-get install -y python3-yaml python3-ply
 
-sudo apt install -y cmake libboost-program-options-dev libdrm-dev libexif-dev
-sudo apt install -y
+sudo apt-get install -y cmake libboost-program-options-dev libdrm-dev libexif-dev
 
 # IMX585 kernel module
 #
