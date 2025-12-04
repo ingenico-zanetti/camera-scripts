@@ -118,3 +118,5 @@ crontab "${SOURCE}/crontab.txt"
 sudo apt-get install -y screen
 sudo apt-get install -y iperf3
 
+sudo usermod -a -G disk -U camera
+
