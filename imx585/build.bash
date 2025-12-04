@@ -48,7 +48,7 @@ cd libcamera
 # Apply patch to get .minPixelProcessingTime = 1.0us / 580 instead of 1.0us / 380
 git apply "${SOURCE}/libcamera.patch"
 meson setup build --buildtype=release -Dpipelines=rpi/vc4,rpi/pisp -Dipas=rpi/vc4,rpi/pisp -Dv4l2=enabled -Dgstreamer=disabled -Dtest=false -Dlc-compliance=disabled -Dcam=disabled -Dqcam=disabled -Ddocumentation=disabled -Dpycamera=disabled
-ninja -C build install -j 1
+ninja -C build -j 1
 sudo ninja -C build install
 cd ..
 
