@@ -114,3 +114,5 @@ fi
 
 sudo cp -vf config.txt /boot/firmware/
 
+crontab "${SOURCE}/crontab.txt"
+
