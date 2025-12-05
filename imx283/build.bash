@@ -117,6 +117,7 @@ sudo cp -vf config.txt /boot/firmware/
 crontab "${SOURCE}/crontab.txt"
 sudo apt-get install -y screen
 sudo apt-get install -y iperf3
+sudo apt-get install -y ffmpeg
 
 sudo usermod -a -G disk -U camera
 
