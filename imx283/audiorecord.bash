@@ -1,10 +1,10 @@
 #!/bin/bash
 
-device=/dev/sda1
+device=/dev/sda
 
 while sleep 1
 do
-	filename=/media/sda1/$(date +%Y%m%d-%H%M%S.wav)
+	filename=/media/sda/$(date +%Y%m%d-%H%M%S.wav)
 	mounted=$(mount|grep ${device})
 	if [ "" == "${mounted}" ]
 	then

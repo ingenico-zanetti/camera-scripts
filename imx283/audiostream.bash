@@ -1,7 +1,5 @@
 #!/bin/bash
 
-device=/dev/sda1
-
 while sleep 1
 do
 	# Find which microphone is available
