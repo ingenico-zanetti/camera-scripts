@@ -18,6 +18,7 @@ do
 		"hw:CARD=MINI,DEV=0")
 			format=" -f S16_LE -c1 -r48000 "
 			option=" -c1 "
+			amixer sset Mic,0 4 unmute cap
 		;;
 		"hw:CARD=H2n,DEV=0")
 			format=" -f dat "
