@@ -15,15 +15,17 @@ do
 	# 4 [H2n            ]: USB-Audio - H2n
 	#                      ZOOM Corporation H2n at usb-xhci-hcd.0-2, full speed
 	# hw:CARD=MINI,DEV=0
-	card=$(grep "\[MINI" < /proc/asound/cards| cut -d '[' -f 1| tr -d ' ')
-	if [ "" != "$card" ]
+	mic=$(grep "\[MINI" < /proc/asound/cards| cut -d '[' -f 1| tr -d ' ')
+	card=$(grep "\[vc4hdmi0" < /proc/asound/cards| cut -d '[' -f 1| tr -d ' ')
+	if [ "" != "$mic" ]
 	then
 		device="hw:CARD=MINI,DEV=0"
 		format=" -f S16_LE -c1 -r48000 "
 		option=" -c1 "
 		echo "Using device ${device} with format ${format} and option ${option}"
-		amixer -c${card} sset Mic,0 8 unmute cap
-		arecord ${format} -t raw -D ${device} - | ./datstreamer ${option} 41075:36000 41000
+		echo "Output to plughw:${card},0"
+		amixer -c${mic} sset Mic,0 8 unmute cap
+		arecord ${format} -t raw -D ${device} - | ./datstreamer ${option} 41075:36000 41000 stdout | aplay -D plughw:${card},0 -
 	else
 		echo "No USB-Audio - MOVO X1 MINI Microphone found"
 	fi
