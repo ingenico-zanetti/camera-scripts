@@ -65,7 +65,7 @@ do
 		${shutter} \
 		${gain}  ${fps}  ${duration} ${resolution} \
 		--codec mjpeg ${quality} --metering average --exposure sport \
-		-o - --libav-format mjpeg  2>>${log} | ./mjpegstreamer 56789
+		-o - --libav-format mjpeg  2>>${log} | ./mjpegstreamer 56789 56782:2 56786:6 56780:60
 	if [ "$D" != "" ]
 	then
 		exit 0
