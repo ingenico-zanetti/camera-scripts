@@ -58,6 +58,20 @@ fi
 
 echo "Using ${duration} ; ${gain} ; ${fps} ; ${shutter} ; ${mode} ; ${resolution} ; ${quality} and logging to ${log}"
 
+# Check pour CFB
+filename=""
+device=/dev/nvme0n1p1
+present=$(grep nvme0n1p1 /proc/partitions)
+if [ "${present}" != "" ]
+then
+	filename=/media/CFB/$(date +%Y%m%d-%H%M%S)
+	mounted=$(mount|grep ${device})
+	if [ "" == "${mounted}" ]
+	then
+		mount /media/CFB
+	fi
+fi
+
 while sleep 1
 do
 	libcamera-vid --verbose --info-text "frame %frame (%fps fps) exp %exp ag %ag dg %dg rg %rg bg %bg" \
@@ -65,7 +79,7 @@ do
 		${shutter} \
 		${gain}  ${fps}  ${duration} ${resolution} \
 		--codec mjpeg ${quality} --metering average --exposure sport \
-		-o - --libav-format mjpeg  2>>${log} | ./mjpegstreamer 56789 56782:2 56786:6 56780:60
+		-o - --libav-format mjpeg  2>>${log} | ./mjpegstreamer "${filename}" 56789 56782:2 56786:6 56780:60
 	if [ "$D" != "" ]
 	then
 		exit 0
