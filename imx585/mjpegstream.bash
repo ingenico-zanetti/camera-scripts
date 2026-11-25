@@ -1,62 +1,20 @@
 #!/bin/bash
-
-if [ "$D" = "" ]
-then
-	duration=" -t 0 "
-else
-	duration=" -t ${D}000 "
-fi
-echo "Using ${duration}"
-
-if [ "" = "$G" ]
-then
-	gain=" --gain 1 "
-else
-	gain=" --gain ${G} "
-fi
-echo "Using ${gain}"
-
-if [ "" = "$F" ]
-then
-	fps=" --framerate 30 "
-else
-	fps=" --framerate ${F} "
-fi
-echo "Using ${fps}"
-
-if [ "" = "$S" ]
-then
-	shutter=" --shutter 16000 "
-else
-	shutter=" --shutter ${S} "
-fi
-echo "Using ${shutter}"
-
-if [ "" = "$Q" ]
-then
-	quality=" --quality 75 "
-else
-	quality=" --quality ${Q} "
-fi
-echo "Using ${quality}"
-
+PATH="/usr/local/bin:$PATH"
 if [ "" = "$UHD" ]
 then
-	mode=" --mode 1928:1090:12 "
-	resolution=" --width 1920 --height 1080 "
-	log="UHD=no.log"
+	echo "Binning 2x2"
+	configuration="UHD=no.MJPEG.CFG"
+	log="$(date +%Y%m%d-%H%M%S.UHD=no.log)"
 elif [ 1 -eq "$UHD" ]
 then
-	mode=" --mode 3856:2180:12 "
-	resolution=" --width 3840 --height 2160 "
-	log="UHD=1.log"
+	echo "Actual 4K"
+	configuration="UHD=1.MJPEG.CFG"
+	log="$(date +%Y%m%d-%H%M%S.UHD=1.log)"
 else
-	mode=" --mode 3856:2180:12 "
-	resolution=" --width 1920 --height 1080 "
-	log="UHD=0.log"
+	echo "1080p from 4K sensor"
+	configuration="UHD=0.MJPEG.CFG"
+	log="$(date +%Y%m%d-%H%M%S.UHD=0.log)"
 fi
-
-echo "Using ${duration} ; ${gain} ; ${fps} ; ${shutter} ; ${mode} ; ${resolution} ; ${quality} and logging to ${log}"
 
 # Check pour CFB
 filename=""
@@ -64,7 +22,7 @@ device=/dev/nvme0n1p1
 present=$(grep nvme0n1p1 /proc/partitions)
 if [ "${present}" != "" ]
 then
-	filename=/media/CFB/$(date +%Y%m%d-%H%M%S)
+	filename="--file /media/CFB/$(date +%Y%m%d-%H%M%S)"
 	mounted=$(mount|grep ${device})
 	if [ "" == "${mounted}" ]
 	then
@@ -74,14 +32,10 @@ fi
 
 while sleep 1
 do
-	libcamera-vid --verbose --info-text "frame %frame (%fps fps) exp %exp ag %ag dg %dg rg %rg bg %bg" \
-		${mode} \
-		${shutter} \
-		${gain}  ${fps}  ${duration} ${resolution} \
-		--codec mjpeg ${quality} --metering average --exposure sport \
-		-o - --libav-format mjpeg  2>>${log} | ./mjpegstreamer "${filename}" 56789 56782:2 56786:6 56780:60
-	if [ "$D" != "" ]
+	if [ "${filename}" != "" ]
 	then
-		exit 0
+		libcamera-vid --config ${configuration} 2>>${log} | ./mjpegstreamer3 ${filename} --tcp 56789 --tcp 56782:2 --tcp 56786:6 --tcp 56780:60
+	else
+		libcamera-vid --config ${configuration} 2>>${log} | ./mjpegstreamer3 --tcp 56789 --tcp 56782:2 --tcp 56786:6 --tcp 56780:60
 	fi
 done
