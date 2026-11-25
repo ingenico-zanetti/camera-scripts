@@ -7,26 +7,15 @@ TEMP=$(mktemp -d)
 echo "Build folder: ${TEMP}"
 cd ${TEMP}
 
-sudo apt-get remove --purge -y rpicam-apps-lite rpicam-apps
+sudo apt-get remove --purge -y rpicam-apps-lite rpicam-apps libcamera
 sudo apt-get remove --purge -y libcamera-dev libepoxy-dev libopencv-dev
-
-sudo apt-get install -y linux-headers-$(uname -r) dkms
-
-sudo apt-get install -y libjpeg-dev libtiff5-dev libpng-dev
-sudo apt-get install -y libavcodec-dev libavdevice-dev libavformat-dev libswresample-dev
-
-sudo apt-get install -y python3-pip python3-jinja2
-sudo apt-get install -y libboost-dev
-sudo apt-get install -y libgnutls28-dev openssl libtiff5-dev pybind11-dev
-sudo apt-get install -y meson cmake ninja-build
-sudo apt-get install -y python3-yaml python3-ply
-
-sudo apt-get install -y cmake libboost-program-options-dev libdrm-dev libexif-dev
+sudo apt-get autoremove
+sudo apt-get install -y linux-headers-$(uname -r) dkms libjpeg-dev libtiff5-dev libpng-dev libavcodec-dev libavdevice-dev libavformat-dev libswresample-dev python3-pip python3-jinja2 libboost-dev libgnutls28-dev openssl libtiff5-dev pybind11-dev meson cmake ninja-build python3-yaml python3-ply cmake libboost-program-options-dev libdrm-dev libexif-dev
 
 # IMX585 kernel module
 #
-git clone -b 6.12.y https://github.com/will127534/imx585-v4l2-driver.git
-cd imx585-v4l2-driver/
+git clone https://github.com/Kurokesu/imx585-rpi-driver.git
+cd imx585-rpi-driver/
 sudo ./setup.sh
 cd ..
 
@@ -42,21 +31,21 @@ cd ..
 
 # libcamera
 #
-git clone https://github.com/will127534/libcamera.git
+git clone https://github.com/Kurokesu/libcamera.git
 cd libcamera
 # Apply patch to get .minPixelProcessingTime = 1.0us / 580 instead of 1.0us / 380
 git apply "${SOURCE}/libcamera.patch"
 meson setup build --buildtype=release -Dpipelines=rpi/vc4,rpi/pisp -Dipas=rpi/vc4,rpi/pisp -Dv4l2=enabled -Dgstreamer=disabled -Dtest=false -Dlc-compliance=disabled -Dcam=disabled -Dqcam=disabled -Ddocumentation=disabled -Dpycamera=disabled
-ninja -C build -j 1
+ninja -C build -j 2
 sudo ninja -C build install
 cd ..
 
 # rpicam-apps
 #
-git clone https://github.com/will127534/rpicam-apps.git
+git clone https://github.com/Kurokesu/rpicam-apps.git
 cd rpicam-apps/
-meson setup build -Denable_libav=enabled -Denable_drm=enabled -Denable_egl=disabled -Denable_qt=disabled -Denable_opencv=disabled -Denable_tflite=disabled -Denable_hailo=disabled
-meson compile -C build -j 1
+meson setup build -Denable_libav=enabled -Denable_drm=enabled -Denable_egl=disabled -Denable_wayland=disabled -Denable_qt=disabled -Denable_opencv=disabled -Denable_tflite=disabled -Denable_hailo=disabled
+meson compile -C build -j 2
 sudo meson install -C build
 cd ..
 
