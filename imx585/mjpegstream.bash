@@ -1,19 +1,34 @@
 #!/bin/bash
 PATH="/usr/local/bin:$PATH"
-if [ "" = "$UHD" ]
-then
-	echo "Binning 2x2"
-	configuration="UHD=no.MJPEG.CFG"
-	log="$(date +%Y%m%d-%H%M%S.UHD=no.log)"
-elif [ 1 -eq "$UHD" ]
+
+if [ "1" = "$UHD" ]
 then
 	echo "Actual 4K"
 	configuration="UHD=1.MJPEG.CFG"
 	log="$(date +%Y%m%d-%H%M%S.UHD=1.log)"
-else
+
+elif [ "HDR1" = "$UHD" ]
+then
+	echo "Actual 4K HDR"
+	configuration="UHD=1.MJPEG.HDR.CFG"
+	log="$(date +%Y%m%d-%H%M%S.UHD=1.log)"
+
+elif [ "0" = "$UHD" ]
+then
 	echo "1080p from 4K sensor"
 	configuration="UHD=0.MJPEG.CFG"
 	log="$(date +%Y%m%d-%H%M%S.UHD=0.log)"
+
+elif [ "HDR0" = "$UHD" ]
+then
+	echo "1080p from 4K HDR sensor"
+	configuration="UHD=0.MJPEG.HDR.CFG"
+	log="$(date +%Y%m%d-%H%M%S.UHD=0.log)"
+
+else
+	echo "Binning 2x2"
+	configuration="UHD=no.MJPEG.CFG"
+	log="$(date +%Y%m%d-%H%M%S.UHD=no.log)"
 fi
 
 
