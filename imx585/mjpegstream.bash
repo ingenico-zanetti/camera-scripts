@@ -11,7 +11,7 @@ elif [ "HDR1" = "$UHD" ]
 then
 	echo "Actual 4K HDR"
 	configuration="UHD=1.MJPEG.HDR.CFG"
-	log="$(date +%Y%m%d-%H%M%S.UHD=1.log)"
+	log="$(date +%Y%m%d-%H%M%S.UHD=HDR1.log)"
 
 elif [ "0" = "$UHD" ]
 then
@@ -23,7 +23,7 @@ elif [ "HDR0" = "$UHD" ]
 then
 	echo "1080p from 4K HDR sensor"
 	configuration="UHD=0.MJPEG.HDR.CFG"
-	log="$(date +%Y%m%d-%H%M%S.UHD=0.log)"
+	log="$(date +%Y%m%d-%H%M%S.UHD=HDR0.log)"
 
 else
 	echo "Binning 2x2"
